@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title>VideoCall 1v1 — WebRTC + PeerJS</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="topbar__title">
+        <h1>VideoCall 1v1</h1>
+        <p class="subtitle">WebRTC via PeerJS (cloud public)</p>
+      </div>
+
+      <div class="topbar__status" aria-live="polite">
+        <span id="statusBadge" class="badge badge--idle">Initialisation…</span>
+        <span id="statusText" class="statusText">Connexion au cloud PeerJS…</span>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="panel">
+        <h2>Votre ID</h2>
+
+        <div class="row">
+          <code id="myPeerId" class="idBox" title="Votre ID PeerJS">—</code>
+          <button id="copyIdBtn" class="btn" type="button" disabled>Copier l’ID</button>
+        </div>
+
+        <p class="hint">
+          Partagez cet ID à votre correspondant. L’autre personne le colle dans “ID du correspondant” puis clique sur “Appeler”.
+        </p>
+
+        <hr class="divider" />
+
+        <h2>Connexion</h2>
+        <label class="label" for="remotePeerId">ID du correspondant</label>
+        <div class="row">
+          <input
+            id="remotePeerId"
+            class="input"
+            type="text"
+            inputmode="text"
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false"
+            placeholder="Ex: 2f3c1a9b-…"
+          />
+          <button id="callBtn" class="btn btn--primary" type="button" disabled>Appeler</button>
+        </div>
+
+        <p class="hint">
+          Note : pour accéder à la caméra/micro, ouvrez cette page en <strong>HTTPS</strong> ou via <strong>http://localhost</strong> (pas en <code>file://</code>).
+        </p>
+
+        <div class="errorBox" id="errorBox" role="alert" hidden></div>
+      </section>
+
+      <section class="panel panel--video">
+        <div class="videoStage" aria-label="Zone vidéo">
+          <video id="remoteVideo" class="video video--remote" playsinline autoplay></video>
+          <div id="remotePlaceholder" class="videoPlaceholder">En attente d’un appel…</div>
+
+          <div class="pip">
+            <video id="localVideo" class="video video--local" playsinline autoplay muted></video>
+            <div id="localPlaceholder" class="pip__placeholder">Aperçu local inactif</div>
+            <div class="pip__label">Vous</div>
+          </div>
+        </div>
+
+        <div class="controls" aria-label="Contrôles d’appel">
+          <button id="btnMic" class="controlBtn" type="button" disabled>
+            <span class="controlBtn__label" id="micLabel">Micro</span>
+          </button>
+          <button id="btnCam" class="controlBtn" type="button" disabled>
+            <span class="controlBtn__label" id="camLabel">Caméra</span>
+          </button>
+          <button id="btnHangup" class="controlBtn controlBtn--danger" type="button" disabled>
+            <span class="controlBtn__label">Raccrocher</span>
+          </button>
+        </div>
+
+        <p class="hint hint--center">
+          Si la connexion échoue sur certains réseaux, c’est souvent lié à l’absence de TURN (service payant) : le cloud PeerJS gratuit ne garantit pas 100% des cas.
+        </p>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- PeerJS (CDN) — pas de serveur backend requis : new Peer() utilise le cloud public -->
+  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js" defer></script>
+  <script src="script.js" defer></script>
+</body>
+</html>
